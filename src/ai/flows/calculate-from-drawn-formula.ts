@@ -42,7 +42,8 @@ const formulaParsingPrompt = ai.definePrompt({
   input: {schema: CalculateFromDrawnFormulaInputSchema},
   output: {schema: z.object({formula: z.string().describe('A parsable mathematical formula.')})},
   prompt: `You are an AI equation parser.
-  Your job is to take a drawn image of an equation and turn it into a parsable equation.
+  Your job is to take a drawn image of an equation and turn it into a parsable equation that can be used by a library like mathjs.
+  For example, if you see a square root symbol, you should output 'sqrt(x)' instead of '\\sqrt{x}'.
 
   Here is the drawn formula: {{media url=formulaDataUri}}
   Return a parsable mathematical formula that matches the image.`,
