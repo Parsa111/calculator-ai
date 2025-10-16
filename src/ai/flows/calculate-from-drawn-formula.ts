@@ -10,6 +10,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { evaluate } from 'mathjs';
 
 const CalculateFromDrawnFormulaInputSchema = z.object({
   formulaDataUri: z
@@ -62,31 +63,8 @@ const calculateFromDrawnFormulaFlow = ai.defineFlow(
     }
 
     try {
-      // TODO: Implement formula evaluation with variable substitution
-      // This placeholder directly returns 0 and needs to be replaced
-      // with actual formula parsing and calculation logic using the
-      // variableValues provided in the input.
-      // For security reasons, dynamically evaluating JavaScript code
-      // is highly discouraged.  Consider using a math expression parser
-      // library for safe evaluation.
-      console.log('Parsed formula:', formula);
-      console.log('Variable values:', input.variableValues);
-
-      // Replace variables in formula with their values
-      let evaluatedFormula = formula;
-      for (const variable in input.variableValues) {
-        evaluatedFormula = evaluatedFormula.replace(variable, input.variableValues[variable].toString());
-      }
-
-      // TODO: Add a math parser library to properly evaluate this formula.
-      // For now, throw error rather than eval.
-      throw new Error('Add a math parser library to evaluate the formula safely.');
-
-      // const result = eval(evaluatedFormula); // Potentially unsafe: do not use eval()
-      // return { result: Number(result) };
-
-      return { result: 0 }; // Placeholder
-
+      const result = evaluate(formula, input.variableValues);
+      return { result: result };
     } catch (error: any) {
       console.error('Error during formula evaluation:', error);
       throw new Error(`Error evaluating formula: ${error.message}`);
