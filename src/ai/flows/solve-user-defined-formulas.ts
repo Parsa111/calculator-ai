@@ -14,7 +14,7 @@ import { evaluate } from 'mathjs';
 
 const SolveUserDefinedFormulaInputSchema = z.object({
   formula: z.string().describe('The user-defined formula (e.g., area = pi * r^2).'),
-  variables: z.record(z.number()).describe('A JSON object containing the variables and their values (e.g., { \"r\": 5 }).'),
+  variables: z.record(z.number()).describe('A JSON object containing the variables and their values (e.g., { "r": 5 }).'),
 });
 export type SolveUserDefinedFormulaInput = z.infer<typeof SolveUserDefinedFormulaInputSchema>;
 
@@ -35,8 +35,10 @@ const solveUserDefinedFormulaFlow = ai.defineFlow(
   },
   async input => {
     try {
-      // Extract the variable name from the formula.
-      const [resultVar, expression] = input.formula.split('=').map(s => s.trim());
+      // Extract the expression from the formula.
+      const expression = input.formula.includes('=')
+        ? input.formula.split('=')[1].trim()
+        : input.formula;
 
       // Evaluate the expression using mathjs, with the provided variables.
       const result = evaluate(expression, input.variables);
