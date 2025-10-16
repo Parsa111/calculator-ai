@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef } from 'react';
@@ -5,10 +6,12 @@ import type { HistoryEntry } from '@/lib/types';
 import { calculateFromDrawnFormula } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import DrawingCanvas, { type DrawingCanvasHandles } from './drawing-canvas';
+import { evaluate } from 'mathjs';
 
 interface FormulaDrawerProps {
   onSolve: (entry: Omit<HistoryEntry, 'id'>) => void;
@@ -18,17 +21,37 @@ export function FormulaDrawer({ onSolve }: FormulaDrawerProps) {
   const [result, setResult] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [variables, setVariables] = useState('');
+  const [textFormula, setTextFormula] = useState('');
   const { toast } = useToast();
   const canvasRef = useRef<DrawingCanvasHandles>(null);
 
   const handleClear = () => {
     canvasRef.current?.clear();
     setResult(null);
+    setTextFormula('');
+    setVariables('');
   };
 
   const handleSubmit = async () => {
     setIsLoading(true);
     setResult(null);
+
+    if (textFormula) {
+      try {
+        const calculatedResult = evaluate(textFormula);
+        setResult(calculatedResult);
+        onSolve({ type: 'draw', expression: textFormula, result: String(calculatedResult) });
+      } catch (e: any) {
+        toast({
+          variant: 'destructive',
+          title: 'Calculation Error',
+          description: `Could not evaluate "${textFormula}". Please check the syntax.`,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+      return;
+    }
 
     const canvas = canvasRef.current?.getCanvas();
     if (!canvas) {
@@ -40,6 +63,25 @@ export function FormulaDrawer({ onSolve }: FormulaDrawerProps) {
       setIsLoading(false);
       return;
     }
+    
+    // Check if canvas is empty
+    const context = canvas.getContext('2d');
+    if (context) {
+        const pixelBuffer = new Uint32Array(
+            context.getImageData(0, 0, canvas.width, canvas.height).data.buffer
+        );
+        const isCanvasEmpty = !pixelBuffer.some(color => color !== 0);
+        if(isCanvasEmpty) {
+             toast({
+                variant: 'destructive',
+                title: 'No Formula',
+                description: 'Please draw a formula or type one in the text field.',
+            });
+            setIsLoading(false);
+            return;
+        }
+    }
+
 
     const formulaDataUri = canvas.toDataURL('image/png');
     
@@ -52,8 +94,6 @@ export function FormulaDrawer({ onSolve }: FormulaDrawerProps) {
     });
 
     try {
-      // This AI flow is designed to throw an error as it's a placeholder.
-      // We will catch it and display a message.
       const response = await calculateFromDrawnFormula({ formulaDataUri, variableValues: variablesObj });
       const solveResult = response.result;
       setResult(solveResult);
@@ -64,7 +104,7 @@ export function FormulaDrawer({ onSolve }: FormulaDrawerProps) {
       toast({
         variant: 'destructive',
         title: 'Calculation Error',
-        description: "This feature is under development. The AI couldn't process the drawn formula.",
+        description: "The AI couldn't process the drawn formula. Please try drawing more clearly.",
       });
     } finally {
       setIsLoading(false);
@@ -74,18 +114,27 @@ export function FormulaDrawer({ onSolve }: FormulaDrawerProps) {
   return (
     <Card className="shadow-lg">
       <CardHeader>
-        <CardTitle className="flex items-center"><Pencil className="w-6 h-6 mr-2 text-primary" />Draw Formula</CardTitle>
+        <CardTitle className="flex items-center"><Pencil className="w-6 h-6 mr-2 text-primary" />Draw or Type Formula</CardTitle>
         <CardDescription>
-          Draw a formula, provide variables, and let AI do the rest.
+          Draw a formula and provide variables, or type a simple expression directly.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        <div>
+            <label className="text-sm font-medium mb-2 block">Formula Input</label>
+            <Input 
+                placeholder="Or type a formula here, e.g., 2+2" 
+                value={textFormula}
+                onChange={(e) => setTextFormula(e.target.value)}
+            />
+        </div>
+        <div className="text-center text-sm text-muted-foreground">OR</div>
         <div>
           <label className="text-sm font-medium mb-2 block">Formula Drawing Area</label>
           <DrawingCanvas ref={canvasRef} />
         </div>
         <div>
-          <label className="text-sm font-medium mb-2 block">Variables (one per line)</label>
+          <label className="text-sm font-medium mb-2 block">Variables (for drawn formula)</label>
           <Textarea 
             placeholder="x=10&#10;y=5" 
             value={variables}
@@ -97,7 +146,7 @@ export function FormulaDrawer({ onSolve }: FormulaDrawerProps) {
         <div className="flex space-x-2">
           <Button onClick={handleSubmit} disabled={isLoading}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Solve Drawn Formula
+            Calculate
           </Button>
           <Button variant="outline" onClick={handleClear}><Trash2 className="mr-2 h-4 w-4"/>Clear</Button>
         </div>
