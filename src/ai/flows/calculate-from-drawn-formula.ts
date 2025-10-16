@@ -63,7 +63,18 @@ const calculateFromDrawnFormulaFlow = ai.defineFlow(
     }
 
     try {
-      const result = evaluate(formula, input.variableValues);
+      let expressionToEvaluate = formula;
+      if (formula.includes('=')) {
+        const parts = formula.split('=');
+        if (parts.length === 2) {
+          expressionToEvaluate = parts[1].trim();
+        } else {
+          // Handle cases with multiple '=', though it might indicate a parsing issue
+          expressionToEvaluate = parts[parts.length - 1].trim();
+        }
+      }
+      
+      const result = evaluate(expressionToEvaluate, input.variableValues);
       return { result: result };
     } catch (error: any) {
       console.error('Error during formula evaluation:', error);
