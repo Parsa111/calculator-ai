@@ -6,7 +6,7 @@ import type { HistoryEntry } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CornerDownLeft, Delete, Percent, Divide, X, Minus, Plus, SquareRoot, Superscript } from 'lucide-react';
+import { CornerDownLeft, Delete, Percent, Divide, X, Minus, Plus, SquareRadical, Superscript } from 'lucide-react';
 
 interface CalculatorProps {
   onCalculate: (entry: Omit<HistoryEntry, 'id'>) => void;
@@ -64,7 +64,7 @@ export function Calculator({ onCalculate }: CalculatorProps) {
     { label: 'tan', action: () => handlePress('tan(') },
     { label: 'log', action: () => handlePress('log10(') },
     { label: 'ln', action: () => handlePress('log(') },
-    { label: <SquareRoot />, action: () => handlePress('sqrt(') },
+    { label: <SquareRadical />, action: () => handlePress('sqrt(') },
     { label: <Superscript />, action: () => handlePress('^') },
     { label: 'π', action: () => handlePress('pi') },
     { label: '(', action: () => handlePress('(') },
