@@ -16,20 +16,29 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandles, {}>((props, ref) => {
   const lineWidth = isMobile ? 3 : 4;
   const strokeStyle = 'hsl(var(--foreground))';
   const lastPosition = useRef<{ x: number, y: number } | null>(null);
+  const backgroundColor = useRef('hsl(var(--background))');
 
   const getContext = () => {
     return canvasRef.current?.getContext('2d');
   };
+  
+  const setCanvasBackground = () => {
+    const canvas = canvasRef.current;
+    const ctx = getContext();
+    if (canvas && ctx) {
+      const computedStyle = getComputedStyle(document.documentElement);
+      backgroundColor.current = computedStyle.getPropertyValue('--background').trim();
+      
+      // Since HSL values are just numbers, we need to construct the full hsl string.
+      // The variable gives something like "231 100% 97%".
+      ctx.fillStyle = `hsl(${backgroundColor.current})`;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+  }
 
   useImperativeHandle(ref, () => ({
     clear: () => {
-      const canvas = canvasRef.current;
-      const ctx = getContext();
-      if (canvas && ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = 'hsl(var(--background))';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
+      setCanvasBackground();
     },
     getCanvas: () => canvasRef.current,
   }));
@@ -50,8 +59,7 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandles, {}>((props, ref) => {
         ctx.lineWidth = lineWidth;
         ctx.strokeStyle = strokeStyle;
         
-        ctx.fillStyle = 'hsl(var(--background))';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        setCanvasBackground();
     }
 
     const getCoords = (event: MouseEvent | TouchEvent) => {
@@ -133,7 +141,7 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandles, {}>((props, ref) => {
   return (
     <canvas
       ref={canvasRef}
-      className="w-full h-48 rounded-lg border-2 border-dashed bg-background touch-none cursor-crosshair"
+      className="w-full h-48 rounded-lg border-2 border-dashed touch-none cursor-crosshair"
     />
   );
 });
