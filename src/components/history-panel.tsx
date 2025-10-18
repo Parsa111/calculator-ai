@@ -21,6 +21,7 @@ const typeBadgeVariant = {
   draw: 'destructive',
   graph: 'default',
   'word-problem': 'default',
+  financial: 'default',
 } as const;
 
 export function HistoryPanel({ history, onClear, onReuse }: HistoryPanelProps) {
