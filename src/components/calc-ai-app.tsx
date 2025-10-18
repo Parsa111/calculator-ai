@@ -9,8 +9,9 @@ import { UnitConverter } from '@/components/unit-converter';
 import { FormulaSolver } from '@/components/formula-solver';
 import { FormulaDrawer } from '@/components/formula-drawer';
 import { GraphingCalculator } from '@/components/graphing-calculator';
+import { WordProblemSolver } from '@/components/word-problem-solver';
 import { HistoryPanel } from '@/components/history-panel';
-import { Calculator as CalculatorIcon, FlaskConical, Pencil, Ruler, LineChart } from 'lucide-react';
+import { Calculator as CalculatorIcon, FlaskConical, Pencil, Ruler, LineChart, BookText } from 'lucide-react';
 
 export function CalcAiApp() {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -44,12 +45,13 @@ export function CalcAiApp() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div className="lg:col-span-2">
           <Tabs defaultValue="calculator" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5 h-auto">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-6 h-auto">
               <TabsTrigger value="calculator"><CalculatorIcon className="w-4 h-4 mr-2" />Calculator</TabsTrigger>
               <TabsTrigger value="unit-converter"><Ruler className="w-4 h-4 mr-2" />Units</TabsTrigger>
               <TabsTrigger value="formula-solver"><FlaskConical className="w-4 h-4 mr-2" />Formulas</TabsTrigger>
               <TabsTrigger value="formula-drawer"><Pencil className="w-4 h-4 mr-2" />Draw</TabsTrigger>
               <TabsTrigger value="graphing-calculator"><LineChart className="w-4 h-4 mr-2" />Graph</TabsTrigger>
+              <TabsTrigger value="word-problem"><BookText className="w-4 h-4 mr-2" />Word Problem</TabsTrigger>
             </TabsList>
             <TabsContent value="calculator" className="mt-4">
               <Calculator onCalculate={addToHistory} />
@@ -65,6 +67,9 @@ export function CalcAiApp() {
             </TabsContent>
             <TabsContent value="graphing-calculator" className="mt-4">
               <GraphingCalculator onCalculate={addToHistory} />
+            </TabsContent>
+            <TabsContent value="word-problem" className="mt-4">
+                <WordProblemSolver onSolve={addToHistory} />
             </TabsContent>
           </Tabs>
         </div>

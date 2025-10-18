@@ -20,6 +20,7 @@ const typeBadgeVariant = {
   formula: 'outline',
   draw: 'destructive',
   graph: 'default',
+  'word-problem': 'default',
 } as const;
 
 export function HistoryPanel({ history, onClear, onReuse }: HistoryPanelProps) {
