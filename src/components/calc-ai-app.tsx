@@ -8,9 +8,8 @@ import { Calculator } from '@/components/calculator';
 import { UnitConverter } from '@/components/unit-converter';
 import { FormulaSolver } from '@/components/formula-solver';
 import { FormulaDrawer } from '@/components/formula-drawer';
-import { VoiceCalculator } from '@/components/voice-calculator';
 import { HistoryPanel } from '@/components/history-panel';
-import { Calculator as CalculatorIcon, FlaskConical, Pencil, Ruler, Mic } from 'lucide-react';
+import { Calculator as CalculatorIcon, FlaskConical, Pencil, Ruler } from 'lucide-react';
 
 export function CalcAiApp() {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -44,12 +43,11 @@ export function CalcAiApp() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div className="lg:col-span-2">
           <Tabs defaultValue="calculator" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5 h-auto">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto">
               <TabsTrigger value="calculator"><CalculatorIcon className="w-4 h-4 mr-2" />Calculator</TabsTrigger>
               <TabsTrigger value="unit-converter"><Ruler className="w-4 h-4 mr-2" />Units</TabsTrigger>
               <TabsTrigger value="formula-solver"><FlaskConical className="w-4 h-4 mr-2" />Formulas</TabsTrigger>
               <TabsTrigger value="formula-drawer"><Pencil className="w-4 h-4 mr-2" />Draw</TabsTrigger>
-              <TabsTrigger value="voice-calculator"><Mic className="w-4 h-4 mr-2" />Voice</TabsTrigger>
             </TabsList>
             <TabsContent value="calculator" className="mt-4">
               <Calculator onCalculate={addToHistory} />
@@ -62,9 +60,6 @@ export function CalcAiApp() {
             </TabsContent>
             <TabsContent value="formula-drawer" className="mt-4">
               <FormulaDrawer onSolve={addToHistory} />
-            </TabsContent>
-            <TabsContent value="voice-calculator" className="mt-4">
-              <VoiceCalculator onCalculate={addToHistory} />
             </TabsContent>
           </Tabs>
         </div>
