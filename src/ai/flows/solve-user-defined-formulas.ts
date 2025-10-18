@@ -30,12 +30,15 @@ export async function solveUserDefinedFormula(input: SolveUserDefinedFormulaInpu
 
 const stepByStepPrompt = ai.definePrompt({
     name: 'stepByStepPrompt',
-    input: { schema: SolveUserDefinedFormulaInputSchema },
+    input: { schema: z.object({
+        formula: z.string(),
+        variables: z.string(),
+    })},
     output: { schema: SolveUserDefinedFormulaOutputSchema },
     prompt: `You are a helpful math tutor. Your goal is to solve the given formula and provide a clear, step-by-step explanation of how you arrived at the answer.
 
 Formula: {{{formula}}}
-Variables: {{{JSON.stringify variables}}}
+Variables: {{{variables}}}
 
 First, substitute the variables into the formula.
 Then, show each step of the calculation process.
@@ -54,7 +57,11 @@ const solveUserDefinedFormulaFlow = ai.defineFlow(
   },
   async input => {
     try {
-      const { output } = await stepByStepPrompt(input);
+      const { output } = await stepByStepPrompt({
+          ...input,
+          variables: JSON.stringify(input.variables),
+      });
+
       if (!output) {
         throw new Error("AI failed to generate a response.");
       }
