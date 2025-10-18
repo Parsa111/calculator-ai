@@ -33,9 +33,6 @@ const nextConfig: NextConfig = {
   },
   experimental: {
   },
-  devIndicators: {
-    buildActivity: false
-  }
 };
 
 export default nextConfig;
