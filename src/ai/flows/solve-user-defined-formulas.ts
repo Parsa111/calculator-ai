@@ -1,9 +1,9 @@
 // SolveUserDefinedFormulas story implementation
 'use server';
 /**
- * @fileOverview A flow to solve user-defined formulas.
+ * @fileOverview A flow to solve user-defined formulas with step-by-step explanations.
  *
- * - solveUserDefinedFormula - A function that solves the user defined formula.
+ * - solveUserDefinedFormula - A function that solves the user defined formula and provides steps.
  * - SolveUserDefinedFormulaInput - The input type for the solveUserDefinedFormula function.
  * - SolveUserDefinedFormulaOutput - The return type for the solveUserDefinedFormula function.
  */
@@ -19,13 +19,32 @@ const SolveUserDefinedFormulaInputSchema = z.object({
 export type SolveUserDefinedFormulaInput = z.infer<typeof SolveUserDefinedFormulaInputSchema>;
 
 const SolveUserDefinedFormulaOutputSchema = z.object({
-  result: z.number().describe('The result of the formula calculation.'),
+  steps: z.array(z.string()).describe('The detailed, step-by-step process for solving the equation.'),
+  result: z.number().describe('The final numerical result of the calculation.'),
 });
 export type SolveUserDefinedFormulaOutput = z.infer<typeof SolveUserDefinedFormulaOutputSchema>;
 
 export async function solveUserDefinedFormula(input: SolveUserDefinedFormulaInput): Promise<SolveUserDefinedFormulaOutput> {
   return solveUserDefinedFormulaFlow(input);
 }
+
+const stepByStepPrompt = ai.definePrompt({
+    name: 'stepByStepPrompt',
+    input: { schema: SolveUserDefinedFormulaInputSchema },
+    output: { schema: SolveUserDefinedFormulaOutputSchema },
+    prompt: `You are a helpful math tutor. Your goal is to solve the given formula and provide a clear, step-by-step explanation of how you arrived at the answer.
+
+Formula: {{{formula}}}
+Variables: {{{JSON.stringify variables}}}
+
+First, substitute the variables into the formula.
+Then, show each step of the calculation process.
+Finally, provide the final answer.
+
+Your output must be a JSON object with two keys: "steps" (an array of strings explaining the process) and "result" (the final numerical answer).
+`,
+});
+
 
 const solveUserDefinedFormulaFlow = ai.defineFlow(
   {
@@ -35,15 +54,24 @@ const solveUserDefinedFormulaFlow = ai.defineFlow(
   },
   async input => {
     try {
-      // Extract the expression from the formula.
+      const { output } = await stepByStepPrompt(input);
+      if (!output) {
+        throw new Error("AI failed to generate a response.");
+      }
+
+      // Also evaluate with mathjs to double-check the AI's result.
+      // The AI is better for steps, mathjs is better for accuracy.
       const expression = input.formula.includes('=')
         ? input.formula.split('=')[1].trim()
         : input.formula;
+      const mathjsResult = evaluate(expression, input.variables);
 
-      // Evaluate the expression using mathjs, with the provided variables.
-      const result = evaluate(expression, input.variables);
-
-      return { result: result };
+      // Return AI-generated steps with the more reliable mathjs result.
+      return {
+        steps: output.steps,
+        result: parseFloat(mathjsResult.toPrecision(10)),
+      };
+      
     } catch (error: any) {
       console.error('Error evaluating formula:', error);
       throw new Error(`Error evaluating formula: ${error.message}`);

@@ -5,13 +5,14 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { HistoryEntry } from '@/lib/types';
-import { solveUserDefinedFormula } from '@/app/actions';
+import { solveUserDefinedFormula, type SolveUserDefinedFormulaOutput } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, FlaskConical } from 'lucide-react';
+import { Loader2, FlaskConical, CheckCircle2 } from 'lucide-react';
+import { Separator } from './ui/separator';
 
 interface FormulaSolverProps {
   onSolve: (entry: Omit<HistoryEntry, 'id'>) => void;
@@ -23,7 +24,7 @@ const formSchema = z.object({
 });
 
 export function FormulaSolver({ onSolve }: FormulaSolverProps) {
-  const [result, setResult] = useState<number | null>(null);
+  const [solution, setSolution] = useState<SolveUserDefinedFormulaOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,7 +35,7 @@ export function FormulaSolver({ onSolve }: FormulaSolverProps) {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
-    setResult(null);
+    setSolution(null);
     setError(null);
     try {
       const variablesObj: Record<string, number> = {};
@@ -50,10 +51,9 @@ export function FormulaSolver({ onSolve }: FormulaSolverProps) {
       }
 
       const response = await solveUserDefinedFormula({ formula: values.formula, variables: variablesObj });
-      const solveResult = response.result;
-      setResult(solveResult);
+      setSolution(response);
       const expression = `${values.formula} with ${JSON.stringify(variablesObj)}`;
-      onSolve({ type: 'formula', expression, result: String(solveResult) });
+      onSolve({ type: 'formula', expression, result: String(response.result) });
     } catch (e: any) {
       setError(e.message || 'Failed to solve formula. Please check your input.');
       console.error(e);
@@ -67,7 +67,7 @@ export function FormulaSolver({ onSolve }: FormulaSolverProps) {
       <CardHeader>
         <CardTitle className="flex items-center"><FlaskConical className="w-6 h-6 mr-2 text-primary" />Formula Solver</CardTitle>
         <CardDescription>
-          Enter a formula and its variables to find the solution.
+          Enter a formula and its variables to see the step-by-step solution.
         </CardDescription>
       </CardHeader>
       <Form {...form}>
@@ -105,12 +105,29 @@ export function FormulaSolver({ onSolve }: FormulaSolverProps) {
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Solve
             </Button>
-            {result !== null && (
-              <Card className="w-full bg-primary/10 border-primary/20">
+            {solution && (
+              <Card className="w-full bg-muted/50 border-border">
                 <CardHeader>
-                  <CardTitle>Result</CardTitle>
-                  <CardDescription className="text-2xl font-semibold text-primary">{result}</CardDescription>
+                  <CardTitle>Solution</CardTitle>
                 </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold mb-2">Steps:</h4>
+                    <ul className="space-y-2">
+                      {solution.steps.map((step, index) => (
+                        <li key={index} className="flex items-start">
+                          <CheckCircle2 className="w-4 h-4 mr-2 mt-1 shrink-0 text-green-500" />
+                          <span>{step}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <Separator />
+                  <div>
+                    <h4 className="font-semibold mb-2">Final Result:</h4>
+                    <p className="text-2xl font-bold text-primary">{solution.result}</p>
+                  </div>
+                </CardContent>
               </Card>
             )}
             {error && <p className="text-sm font-medium text-destructive">{error}</p>}
