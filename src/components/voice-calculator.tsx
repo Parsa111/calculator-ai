@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef } from 'react';
@@ -12,6 +13,14 @@ interface VoiceCalculatorProps {
   onCalculate: (entry: Omit<HistoryEntry, 'id'>) => void;
 }
 
+const mimeTypes = [
+    'audio/webm;codecs=opus',
+    'audio/webm',
+    'audio/ogg;codecs=opus',
+    'audio/ogg',
+    'audio/mp4',
+];
+
 export function VoiceCalculator({ onCalculate }: VoiceCalculatorProps) {
   const [result, setResult] = useState<string | null>(null);
   const [query, setQuery] = useState<string | null>(null);
@@ -20,26 +29,37 @@ export function VoiceCalculator({ onCalculate }: VoiceCalculatorProps) {
   const { toast } = useToast();
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  const recorderMimeType = useRef<string | null>(null);
 
   const handleStartRecording = async () => {
     setResult(null);
     setQuery(null);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorderRef.current = new MediaRecorder(stream);
+      
+      const supportedMimeType = mimeTypes.find(type => MediaRecorder.isTypeSupported(type));
+      if (!supportedMimeType) {
+        throw new Error("No supported audio format found for recording.");
+      }
+      recorderMimeType.current = supportedMimeType;
+      
+      mediaRecorderRef.current = new MediaRecorder(stream, { mimeType: supportedMimeType });
+      
       mediaRecorderRef.current.addEventListener("dataavailable", (event) => {
-        audioChunksRef.current.push(event.data);
+        if (event.data.size > 0) {
+            audioChunksRef.current.push(event.data);
+        }
       });
       mediaRecorderRef.current.addEventListener("stop", handleStopRecording);
       audioChunksRef.current = [];
       mediaRecorderRef.current.start();
       setIsRecording(true);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error accessing microphone:", err);
       toast({
         variant: "destructive",
         title: "Microphone Error",
-        description: "Could not access the microphone. Please grant permission in your browser.",
+        description: err.message || "Could not access the microphone. Please grant permission in your browser.",
       });
     }
   };
@@ -54,7 +74,8 @@ export function VoiceCalculator({ onCalculate }: VoiceCalculatorProps) {
       setIsRecording(false);
       setIsLoading(true);
 
-      const audioBlob = new Blob(audioChunksRef.current);
+      const audioBlob = new Blob(audioChunksRef.current, { type: recorderMimeType.current || undefined });
+      
       const reader = new FileReader();
       reader.readAsDataURL(audioBlob);
       reader.onloadend = async () => {
