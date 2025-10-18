@@ -32,8 +32,8 @@ export async function calculateFromAudio(input: CalculateFromAudioInput): Promis
 const transcriptionPrompt = ai.definePrompt({
   name: 'transcriptionPrompt',
   input: {schema: CalculateFromAudioInputSchema},
-  output: {schema: z.object({ query: z.string() })},
-  prompt: `Transcribe the following audio. The audio contains a spoken calculation query.
+  output: {schema: z.object({ query: z.string().optional() })},
+  prompt: `Transcribe the audio provided. The audio contains a spoken calculation query. If you cannot transcribe the audio, do not return anything.
   
   Audio: {{media url=audioDataUri}}`,
 });
@@ -46,7 +46,7 @@ const calculationPrompt = ai.definePrompt({
   
   Query: {{{query}}}
   
-  Respond with just the answer, nothing else. No extraneous text.`,
+  Respond with just the answer, nothing else. No extraneous text. If the query is not a calculation, return an error message.`,
 });
 
 const calculateFromAudioFlow = ai.defineFlow(
