@@ -32,9 +32,9 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    allowedDevOrigins: [
-      "https://*.cluster-ux5mmlia3zhhask7riihruxydo.cloudworkstations.dev",
-    ],
+  },
+  devIndicators: {
+    buildActivity: false
   }
 };
 
