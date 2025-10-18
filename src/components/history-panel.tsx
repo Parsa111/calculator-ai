@@ -19,6 +19,7 @@ const typeBadgeVariant = {
   unit: 'default',
   formula: 'outline',
   draw: 'destructive',
+  graph: 'default',
 } as const;
 
 export function HistoryPanel({ history, onClear, onReuse }: HistoryPanelProps) {
