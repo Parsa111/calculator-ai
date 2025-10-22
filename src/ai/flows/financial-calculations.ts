@@ -10,14 +10,14 @@ import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 
 // Loan Payment Calculation
-export const LoanPaymentInputSchema = z.object({
+const LoanPaymentInputSchema = z.object({
   principal: z.number().describe('The total loan amount.'),
   annualRate: z.number().describe('The annual interest rate (as a percentage, e.g., 5 for 5%).'),
   years: z.number().describe('The loan term in years.'),
 });
 export type LoanPaymentInput = z.infer<typeof LoanPaymentInputSchema>;
 
-export const LoanPaymentOutputSchema = z.object({
+const LoanPaymentOutputSchema = z.object({
   monthlyPayment: z.number().describe('The calculated monthly payment amount.'),
   totalPayment: z.number().describe('The total amount paid over the life of the loan.'),
   totalInterest: z.number().describe('The total interest paid over the life of the loan.'),
@@ -68,7 +68,7 @@ export async function calculateLoanPayment(input: LoanPaymentInput): Promise<Loa
 
 
 // Compound Interest Calculation
-export const CompoundInterestInputSchema = z.object({
+const CompoundInterestInputSchema = z.object({
   principal: z.number().describe('The initial principal amount.'),
   annualRate: z.number().describe('The annual interest rate (as a percentage, e.g., 5 for 5%).'),
   years: z.number().describe('The number of years the money is invested or borrowed for.'),
@@ -76,7 +76,7 @@ export const CompoundInterestInputSchema = z.object({
 });
 export type CompoundInterestInput = z.infer<typeof CompoundInterestInputSchema>;
 
-export const CompoundInterestOutputSchema = z.object({
+const CompoundInterestOutputSchema = z.object({
   futureValue: z.number().describe('The future value of the investment/loan, including interest.'),
   totalInterest: z.number().describe('The total interest earned.'),
 });
