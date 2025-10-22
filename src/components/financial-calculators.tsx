@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -6,7 +7,7 @@ import { LoanCalculator } from '@/components/loan-calculator';
 import { CompoundInterestCalculator } from '@/components/compound-interest-calculator';
 import { HandCoins, Landmark, PiggyBank, Receipt } from 'lucide-react';
 import { HistoryEntry } from '@/lib/types';
-import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 
 interface FinancialCalculatorsProps {
   onCalculate: (entry: Omit<HistoryEntry, 'id'>) => void;
