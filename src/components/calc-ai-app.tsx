@@ -13,6 +13,7 @@ import { WordProblemSolver } from '@/components/word-problem-solver';
 import { FinancialCalculators } from '@/components/financial-calculators';
 import { HistoryPanel } from '@/components/history-panel';
 import { Calculator as CalculatorIcon, FlaskConical, Pencil, Ruler, LineChart, BookText, Landmark } from 'lucide-react';
+import { ScrollArea, ScrollBar } from './ui/scroll-area';
 
 export function CalcAiApp() {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -33,28 +34,31 @@ export function CalcAiApp() {
   };
 
   return (
-    <div className="flex flex-col space-y-8">
-      <header className="text-center">
-        <h1 className="text-4xl sm:text-5xl font-bold text-primary tracking-tight">
+    <div className="flex flex-col space-y-6">
+      <header className="text-center pt-4">
+        <h1 className="text-3xl sm:text-5xl font-bold text-primary tracking-tight">
           CalcAI
         </h1>
-        <p className="mt-2 text-lg text-muted-foreground">
+        <p className="mt-2 text-md sm:text-lg text-muted-foreground">
           Your intelligent partner for all calculations.
         </p>
       </header>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         <div className="lg:col-span-2">
           <Tabs defaultValue="calculator" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-7 h-auto">
-              <TabsTrigger value="calculator"><CalculatorIcon className="w-4 h-4 mr-2" />Calculator</TabsTrigger>
-              <TabsTrigger value="unit-converter"><Ruler className="w-4 h-4 mr-2" />Units</TabsTrigger>
-              <TabsTrigger value="formula-solver"><FlaskConical className="w-4 h-4 mr-2" />Formulas</TabsTrigger>
-              <TabsTrigger value="formula-drawer"><Pencil className="w-4 h-4 mr-2" />Draw</TabsTrigger>
-              <TabsTrigger value="graphing-calculator"><LineChart className="w-4 h-4 mr-2" />Graph</TabsTrigger>
-              <TabsTrigger value="word-problem"><BookText className="w-4 h-4 mr-2" />Word Problem</TabsTrigger>
-              <TabsTrigger value="financial"><Landmark className="w-4 h-4 mr-2" />Financial</TabsTrigger>
-            </TabsList>
+             <ScrollArea className="w-full whitespace-nowrap">
+              <TabsList className="w-max">
+                <TabsTrigger value="calculator"><CalculatorIcon className="w-4 h-4 mr-2" />Calculator</TabsTrigger>
+                <TabsTrigger value="unit-converter"><Ruler className="w-4 h-4 mr-2" />Units</TabsTrigger>
+                <TabsTrigger value="formula-solver"><FlaskConical className="w-4 h-4 mr-2" />Formulas</TabsTrigger>
+                <TabsTrigger value="formula-drawer"><Pencil className="w-4 h-4 mr-2" />Draw</TabsTrigger>
+                <TabsTrigger value="graphing-calculator"><LineChart className="w-4 h-4 mr-2" />Graph</TabsTrigger>
+                <TabsTrigger value="word-problem"><BookText className="w-4 h-4 mr-2" />Word Problem</TabsTrigger>
+                <TabsTrigger value="financial"><Landmark className="w-4 h-4 mr-2" />Financial</TabsTrigger>
+              </TabsList>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
             <TabsContent value="calculator" className="mt-4">
               <Calculator onCalculate={addToHistory} />
             </TabsContent>

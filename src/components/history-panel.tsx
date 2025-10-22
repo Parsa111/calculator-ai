@@ -36,7 +36,7 @@ export function HistoryPanel({ history, onClear, onReuse }: HistoryPanelProps) {
       </CardHeader>
       <Separator />
       <CardContent className="p-0">
-        <ScrollArea className="h-[450px]">
+        <ScrollArea className="h-[400px] lg:h-[450px]">
           {history.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full p-6 text-center">
               <p className="text-sm text-muted-foreground">No calculations yet.</p>
@@ -48,7 +48,7 @@ export function HistoryPanel({ history, onClear, onReuse }: HistoryPanelProps) {
                 <div key={entry.id} className="p-3 rounded-md border bg-card hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => onReuse(entry)}>
                   <div className="flex justify-between items-start">
                     <p className="text-xs text-muted-foreground break-all font-mono pr-2">{entry.expression}</p>
-                    <Badge variant={typeBadgeVariant[entry.type] || 'secondary'} className="capitalize text-xs">{entry.type}</Badge>
+                    <Badge variant={typeBadgeVariant[entry.type] || 'secondary'} className="capitalize text-xs whitespace-nowrap">{entry.type}</Badge>
                   </div>
                   <p className="text-lg font-semibold text-primary break-all font-mono mt-1">= {entry.result}</p>
                 </div>

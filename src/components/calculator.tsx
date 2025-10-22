@@ -14,7 +14,7 @@ interface CalculatorProps {
 
 const CalculatorDisplay = ({ value }: { value: string }) => (
   <div className="bg-background/80 rounded-lg p-4 text-right break-all">
-    <span className="text-4xl font-mono text-foreground">{value || '0'}</span>
+    <span className="text-3xl sm:text-4xl font-mono text-foreground">{value || '0'}</span>
   </div>
 );
 
@@ -81,7 +81,7 @@ export function Calculator({ onCalculate }: CalculatorProps) {
       <Button
         key={index}
         variant="secondary"
-        className={`h-16 text-2xl ${className}`}
+        className={`h-14 sm:h-16 text-xl sm:text-2xl ${className}`}
         onClick={action}
       >
         {label}
@@ -91,7 +91,7 @@ export function Calculator({ onCalculate }: CalculatorProps) {
 
   return (
     <Card className="shadow-lg">
-      <CardContent className="p-4 space-y-4">
+      <CardContent className="p-2 sm:p-4 space-y-2 sm:space-y-4">
         <CalculatorDisplay value={input} />
         <div className="grid grid-cols-4 gap-2">
             {basicKeys.map(renderKey)}
