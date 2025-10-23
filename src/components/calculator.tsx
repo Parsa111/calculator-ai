@@ -146,18 +146,17 @@ export function Calculator({ onCalculate }: CalculatorProps) {
           <TabsContent value="basic" className="mt-4">
             <div className="grid grid-cols-4 gap-2">
               {topRowKeys.map((k, i) => renderKey(k, i, 'top-basic'))}
-              {operatorKeys[0] && renderKey(operatorKeys[0], 0, 'op-basic')}
+              {renderKey(operatorKeys[0], 0, 'op-basic')}
 
               {basicKeys.slice(0, 3).map((k, i) => renderKey(k, i, 'basic-basic-1'))}
-              {operatorKeys[1] && renderKey(operatorKeys[1], 1, 'op-basic')}
+              {renderKey(operatorKeys[1], 1, 'op-basic')}
 
               {basicKeys.slice(3, 6).map((k, i) => renderKey(k, i, 'basic-basic-2'))}
-              {operatorKeys[2] && renderKey(operatorKeys[2], 2, 'op-basic')}
+              {renderKey(operatorKeys[2], 2, 'op-basic')}
               
               {basicKeys.slice(6, 9).map((k, i) => renderKey(k, i, 'basic-basic-3'))}
-              <div className="col-start-4 row-start-4 row-span-2">
-                {renderKey(operatorKeys[3], 3, 'op-basic')}
-              </div>
+
+              {renderKey(operatorKeys[3], 3, 'op-basic-eq')}
               
               <div className="grid grid-cols-3 col-span-3 gap-2">
                 {renderKey(basicKeys[9], 9, 'basic-basic-4')}
