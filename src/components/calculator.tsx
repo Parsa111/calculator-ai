@@ -111,29 +111,35 @@ export function Calculator({ onCalculate }: CalculatorProps) {
             <TabsTrigger value="basic">Basic</TabsTrigger>
           </TabsList>
           <TabsContent value="scientific" className="mt-4">
-            <div className="grid grid-cols-4 gap-2">
-              <div className="grid grid-cols-subgrid col-span-4 gap-2">
-                {topRowKeys.map((k, i) => renderKey(k, i, 'top'))}
-                {renderKey(operatorKeys[0], 0, 'op')}
-              </div>
-              <div className="grid grid-cols-3 col-span-3 gap-2">
+            <div className="grid grid-cols-5 gap-2">
+                {topRowKeys.map((k, i) => renderKey(k, i, 'top-sci'))}
+                {renderKey(operatorKeys[0], 0, 'op-sci-1')}
+                
                 {advancedKeys.map((k, i) => renderKey(k, i, 'adv'))}
-              </div>
-               <div className="flex flex-col gap-2">
-                {basicKeys.slice(0, 3).map((k, i) => renderKey(k, i, 'basic-sci-1'))}
-              </div>
-               <div className="grid grid-cols-3 col-span-3 gap-2">
-                {basicKeys.slice(3, 9).map((k, i) => renderKey(k, i, 'basic-sci-2'))}
-              </div>
-               <div className="flex flex-col gap-2">
-                {operatorKeys.slice(1, 3).map((k, i) => renderKey(k, i, 'op-sci-1'))}
-              </div>
-              <div className="grid grid-cols-3 col-span-3 gap-2">
-                 {basicKeys.slice(9).map((k, i) => renderKey(k, i, 'basic-sci-3'))}
-              </div>
-               <div className="flex flex-col gap-2">
-                 {renderKey(operatorKeys[3], 3, 'op-sci-2')}
-              </div>
+                {renderKey(basicKeys[0], 0, 'basic-sci-1')}
+                {renderKey(basicKeys[1], 1, 'basic-sci-2')}
+                {renderKey(basicKeys[2], 2, 'basic-sci-3')}
+                {renderKey(operatorKeys[1], 1, 'op-sci-2')}
+
+                {renderKey(basicKeys[3], 3, 'basic-sci-4')}
+                {renderKey(basicKeys[4], 4, 'basic-sci-5')}
+                {renderKey(basicKeys[5], 5, 'basic-sci-6')}
+                {renderKey(operatorKeys[2], 2, 'op-sci-3')}
+
+                {renderKey(basicKeys[6], 6, 'basic-sci-7')}
+                {renderKey(basicKeys[7], 7, 'basic-sci-8')}
+                {renderKey(basicKeys[8], 8, 'basic-sci-9')}
+
+                <div className="col-start-4 row-start-4 row-span-2">
+                    {renderKey(operatorKeys[3], 3, 'op-sci-4')}
+                </div>
+
+                <div className="grid grid-cols-2 col-span-3 gap-2">
+                    {renderKey(basicKeys[9], 9, 'basic-sci-10')}
+                    <div className="grid grid-cols-2 col-span-2 gap-2">
+                        {basicKeys.slice(10).map((k, i) => renderKey(k, i + 10, 'basic-sci-11'))}
+                    </div>
+                </div>
             </div>
           </TabsContent>
           <TabsContent value="basic" className="mt-4">
@@ -163,5 +169,3 @@ export function Calculator({ onCalculate }: CalculatorProps) {
     </Card>
   );
 }
-
-    
