@@ -113,53 +113,61 @@ export function Calculator({ onCalculate }: CalculatorProps) {
           </TabsList>
           <TabsContent value="scientific" className="mt-4">
             <div className="grid grid-cols-5 gap-2">
-                {topRowKeys.map((k, i) => renderKey(k, i, 'top-sci'))}
-                {renderKey(operatorKeys[0], 0, 'op-sci-1')}
-                
-                {advancedKeys.map((k, i) => renderKey(k, i, 'adv'))}
-                {renderKey(basicKeys[0], 0, 'basic-sci-1')}
-                {renderKey(basicKeys[1], 1, 'basic-sci-2')}
-                {renderKey(basicKeys[2], 2, 'basic-sci-3')}
-                {renderKey(operatorKeys[1], 1, 'op-sci-2')}
+              {topRowKeys.map((k, i) => renderKey(k, i, 'top-sci'))}
+              {renderKey(operatorKeys[0], 0, 'op-sci')}
+              
+              {advancedKeys.slice(0, 4).map((k, i) => renderKey(k, i, 'adv-1'))}
+              {renderKey(advancedKeys[4], 4, 'adv-1')}
+              
+              {advancedKeys.slice(5, 9).map((k, i) => renderKey(k, i + 5, 'adv-2'))}
+              {renderKey(operatorKeys[1], 1, 'op-sci')}
 
-                {renderKey(basicKeys[3], 3, 'basic-sci-4')}
-                {renderKey(basicKeys[4], 4, 'basic-sci-5')}
-                {renderKey(basicKeys[5], 5, 'basic-sci-6')}
-                {renderKey(operatorKeys[2], 2, 'op-sci-3')}
+              {advancedKeys.slice(9, 12).map((k, i) => renderKey(k, i + 9, 'adv-3'))}
+              {renderKey(basicKeys[0], 0, 'basic-sci')}
+              {renderKey(operatorKeys[2], 2, 'op-sci')}
 
-                {renderKey(basicKeys[6], 6, 'basic-sci-7')}
-                {renderKey(basicKeys[7], 7, 'basic-sci-8')}
-                {renderKey(basicKeys[8], 8, 'basic-sci-9')}
+              {renderKey(basicKeys[1], 1, 'basic-sci')}
+              {renderKey(basicKeys[2], 2, 'basic-sci')}
+              {renderKey(basicKeys[3], 3, 'basic-sci')}
+              {renderKey(basicKeys[4], 4, 'basic-sci')}
+              
+              <div className="row-span-2">
+                {renderKey(operatorKeys[3], 3, 'op-sci')}
+              </div>
+              
+              {renderKey(basicKeys[5], 5, 'basic-sci')}
+              {renderKey(basicKeys[6], 6, 'basic-sci')}
+              {renderKey(basicKeys[7], 7, 'basic-sci')}
+              {renderKey(basicKeys[8], 8, 'basic-sci')}
 
-                <div className="col-start-4 row-start-4 row-span-2">
-                    {renderKey(operatorKeys[3], 3, 'op-sci-4')}
-                </div>
-
-                <div className="grid grid-cols-2 col-span-3 gap-2">
-                    {renderKey(basicKeys[9], 9, 'basic-sci-10')}
-                    <div className="grid grid-cols-2 col-span-2 gap-2">
-                        {basicKeys.slice(10).map((k, i) => renderKey(k, i + 10, 'basic-sci-11'))}
-                    </div>
-                </div>
+              <div className="col-span-2">
+                {renderKey(basicKeys[9], 9, 'basic-sci')}
+              </div>
+              {renderKey(basicKeys[10], 10, 'basic-sci')}
+              {renderKey(basicKeys[11], 11, 'basic-sci')}
             </div>
           </TabsContent>
           <TabsContent value="basic" className="mt-4">
-            <div className="grid grid-cols-4 gap-2">
+             <div className="grid grid-cols-4 gap-2">
               {topRowKeys.map((k, i) => renderKey(k, i, 'top-basic'))}
               {renderKey(operatorKeys[0], 0, 'op-basic')}
 
               {basicKeys.slice(0, 3).map((k, i) => renderKey(k, i, 'basic-basic-1'))}
               {renderKey(operatorKeys[1], 1, 'op-basic')}
 
-              {basicKeys.slice(3, 6).map((k, i) => renderKey(k, i, 'basic-basic-2'))}
+              {basicKeys.slice(3, 6).map((k, i) => renderKey(k, i + 3, 'basic-basic-2'))}
               {renderKey(operatorKeys[2], 2, 'op-basic')}
               
-              {basicKeys.slice(6, 9).map((k, i) => renderKey(k, i, 'basic-basic-3'))}
+              {basicKeys.slice(6, 9).map((k, i) => renderKey(k, i + 6, 'basic-basic-3'))}
 
-              {renderKey(operatorKeys[3], 3, 'op-basic-eq')}
+              <div className="row-span-2">
+                {renderKey(operatorKeys[3], 3, 'op-basic-eq')}
+              </div>
               
               <div className="grid grid-cols-3 col-span-3 gap-2">
-                {renderKey(basicKeys[9], 9, 'basic-basic-4')}
+                <div className="col-span-2">
+                    {renderKey(basicKeys[9], 9, 'basic-basic-4')}
+                </div>
                 <div className="grid grid-cols-2 col-span-2 gap-2">
                     {basicKeys.slice(10).map((k, i) => renderKey(k, i + 10, 'basic-basic-5'))}
                 </div>
