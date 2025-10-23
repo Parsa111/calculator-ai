@@ -48,15 +48,20 @@ export function Calculator({ onCalculate }: CalculatorProps) {
     }
   };
 
-  const renderKey = (key: any, index: number, grid?: string) => {
+  const renderKey = (key: any, index?: number, grid?: string) => {
     const isObject = typeof key === 'object' && key !== null;
     const label = isObject ? key.label : key;
     const action = isObject ? key.action : () => handlePress(key);
-    const className = isObject ? key.className : '';
+    let className = isObject ? key.className : '';
 
+    // Special handling for basic layout's double-width '0'
+    if(grid === 'basic-basic-4' && label === '0') {
+      className = `${className} col-span-2`;
+    }
+    
     return (
       <Button
-        key={`${grid}-${index}`}
+        key={`${grid}-${index}-${label}`}
         variant="secondary"
         className={`h-12 sm:h-14 text-xl sm:text-2xl ${className}`}
         onClick={action}
@@ -77,8 +82,9 @@ export function Calculator({ onCalculate }: CalculatorProps) {
     { label: <X />, action: () => handlePress('x') },
     { label: <Minus />, action: () => handlePress('-') },
     { label: <Plus />, action: () => handlePress('+') },
-    { label: '=', action: handleCalculate, className: 'row-span-2 bg-primary hover:bg-primary/90 text-primary-foreground h-full' },
   ];
+  
+  const equalsKey = { label: '=', action: handleCalculate, className: 'row-span-2 bg-primary hover:bg-primary/90 text-primary-foreground h-full' };
 
   const basicKeys = [
     '7', '8', '9', 
@@ -88,9 +94,10 @@ export function Calculator({ onCalculate }: CalculatorProps) {
   ];
 
   const advancedKeys = [
-    'sin', 'cos', 'tan', '(', ')',
-    'ln', 'log10', <SquareRadical />, '^', '!',
-    'π', 'e', 
+    'sin', 'cos', 'tan',
+    'ln', 'log10',
+    'sqrt', '^', '!',
+    'pi', 'e', '(', ')',
   ];
 
   return (
@@ -105,40 +112,42 @@ export function Calculator({ onCalculate }: CalculatorProps) {
           </TabsList>
           <TabsContent value="scientific" className="mt-4">
              <div className="grid grid-cols-5 gap-2">
-              {/* Row 1 */}
-              {renderKey({ label: advancedKeys[0], action: () => handlePress('sin(') }, 'adv-sin')}
-              {renderKey({ label: advancedKeys[1], action: () => handlePress('cos(') }, 'adv-cos')}
-              {renderKey({ label: advancedKeys[2], action: () => handlePress('tan(') }, 'adv-tan')}
-              {renderKey({ label: advancedKeys[3], action: () => handlePress('(') }, 'adv-paren-open')}
-              {renderKey({ label: advancedKeys[4], action: () => handlePress(')') }, 'adv-paren-close')}
+                {/* Advanced Functions */}
+                {renderKey({ label: 'sin', action: () => handlePress('sin(') })}
+                {renderKey({ label: 'cos', action: () => handlePress('cos(') })}
+                {renderKey({ label: 'tan', action: () => handlePress('tan(') })}
+                {renderKey({ label: 'ln', action: () => handlePress('log(') })}
+                {renderKey({ label: 'log10', action: () => handlePress('log10(') })}
 
-              {/* Row 2 */}
-              {renderKey({ label: advancedKeys[5], action: () => handlePress('log(') }, 'adv-ln')}
-              {renderKey({ label: advancedKeys[6], action: () => handlePress('log10(') }, 'adv-log10')}
-              {topRowKeys.map((k, i) => renderKey(k, i, 'top-sci'))}
-              {renderKey(operatorKeys[0], 0, 'op-sci')}
-              
-              {/* Row 3 */}
-              {renderKey({ label: advancedKeys[7], action: () => handlePress('sqrt(') }, 'adv-sqrt')}
-              {basicKeys.slice(0, 3).map((k, i) => renderKey(k, i, 'basic-sci-1'))}
-              {renderKey(operatorKeys[1], 1, 'op-sci')}
+                {/* Top Row */}
+                {renderKey({ label: '(', action: () => handlePress('(') })}
+                {renderKey({ label: ')', action: () => handlePress(')') })}
+                {topRowKeys.map((k,i) => renderKey(k,i,'sci-top'))}
+                
+                {/* Numbers & Operators */}
+                {renderKey({ label: <SquareRadical />, action: () => handlePress('sqrt(') })}
+                {renderKey('7')}
+                {renderKey('8')}
+                {renderKey('9')}
+                {renderKey({ label: <Divide />, action: () => handlePress('/') })}
 
-              {/* Row 4 */}
-              {renderKey({ label: advancedKeys[8], action: () => handlePress('^') }, 'adv-pow')}
-              {basicKeys.slice(3, 6).map((k, i) => renderKey(k, i, 'basic-sci-2'))}
-              {renderKey(operatorKeys[2], 2, 'op-sci')}
+                {renderKey({ label: <Superscript />, action: () => handlePress('^') })}
+                {renderKey('4')}
+                {renderKey('5')}
+                {renderKey('6')}
+                {renderKey({ label: <X />, action: () => handlePress('x') })}
+                
+                {renderKey({ label: '!', action: () => handlePress('!') })}
+                {renderKey('1')}
+                {renderKey('2')}
+                {renderKey('3')}
+                {renderKey({ label: <Minus />, action: () => handlePress('-') })}
 
-              {/* Row 5 */}
-              {renderKey({ label: advancedKeys[9], action: () => handlePress('!') }, 'adv-fact')}
-              {basicKeys.slice(6, 9).map((k, i) => renderKey(k, i, 'basic-sci-3'))}
-              {renderKey(operatorKeys[3], 3, 'op-sci')}
-
-              {/* Row 6 */}
-              {renderKey({ label: advancedKeys[10], action: () => handlePress('pi') }, 'adv-pi')}
-              {renderKey({ label: advancedKeys[11], action: () => handlePress('e') }, 'adv-e')}
-              {renderKey(basicKeys[9], 9, 'basic-sci-4')}
-              {renderKey(basicKeys[10], 10, 'basic-sci-5')}
-              {renderKey(operatorKeys[4], 4, 'op-sci-eq')}
+                {renderKey('pi')}
+                {renderKey('e')}
+                {renderKey('0')}
+                {renderKey('.')}
+                {renderKey({ label: <Plus />, action: () => handlePress('+') })}
             </div>
           </TabsContent>
           <TabsContent value="basic" className="mt-4">
@@ -155,9 +164,9 @@ export function Calculator({ onCalculate }: CalculatorProps) {
               {basicKeys.slice(6, 9).map((k, i) => renderKey(k, i + 6, 'basic-basic-3'))}
               {renderKey(operatorKeys[3], 3, 'op-basic')}
               
-              {renderKey(basicKeys[9], 9, 'basic-basic-4', {className: "col-span-2"})}
+              {renderKey(basicKeys[9], 9, 'basic-basic-4')}
               {renderKey(basicKeys[10], 10, 'basic-basic-5')}
-              {renderKey(operatorKeys[4], 4, 'op-basic-eq')}
+              {renderKey({ label: '=', action: handleCalculate, className: 'bg-primary hover:bg-primary/90 text-primary-foreground'}, 4, 'op-basic-eq')}
             </div>
           </TabsContent>
         </Tabs>
