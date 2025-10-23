@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -157,10 +158,12 @@ export function Calculator({ onCalculate }: CalculatorProps) {
               <div className="col-start-4 row-start-4 row-span-2">
                 {renderKey(operatorKeys[3], 3, 'op-basic')}
               </div>
-
-              {renderKey(basicKeys[9], 9, 'basic-basic-4')}
-              <div className="grid grid-cols-2 col-span-2 gap-2">
-                {basicKeys.slice(10).map((k, i) => renderKey(k, i, 'basic-basic-5'))}
+              
+              <div className="grid grid-cols-3 col-span-3 gap-2">
+                {renderKey(basicKeys[9], 9, 'basic-basic-4')}
+                <div className="grid grid-cols-2 col-span-2 gap-2">
+                    {basicKeys.slice(10).map((k, i) => renderKey(k, i + 10, 'basic-basic-5'))}
+                </div>
               </div>
             </div>
           </TabsContent>
