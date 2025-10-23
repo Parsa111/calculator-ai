@@ -7,7 +7,7 @@ import type { HistoryEntry } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CornerDownLeft, Delete, Percent, Divide, X, Minus, Plus, SquareRadical, Superscript } from 'lucide-react';
+import { Delete, Percent, Divide, X, Minus, Plus, SquareRadical, Superscript } from 'lucide-react';
 
 interface CalculatorProps {
   onCalculate: (entry: Omit<HistoryEntry, 'id'>) => void;
@@ -61,6 +61,9 @@ export function Calculator({ onCalculate }: CalculatorProps) {
     if (grid === 'basic' && keyString === '0') {
         className = `${className} col-span-2`;
     }
+     if (grid === 'basic' && keyString === '=') {
+        className = `${className} col-span-2`;
+    }
     
     return (
       <Button
@@ -93,11 +96,11 @@ export function Calculator({ onCalculate }: CalculatorProps) {
 
   const scientificGrid = [
     // Row 1
-    topRowKeys[0], // C
     {label: '(', action: () => handlePress('('), key: '('}, 
     {label: ')', action: () => handlePress(')'), key: ')'}, 
-    topRowKeys[1], // DEL
     topRowKeys[2], // %
+    topRowKeys[0], // C
+    topRowKeys[1], // DEL
     // Row 2
     {label: 'sin', action: () => handlePress('sin('), key: 'sin'}, 
     {label: 'cos', action: () => handlePress('cos('), key: 'cos'}, 
@@ -105,26 +108,30 @@ export function Calculator({ onCalculate }: CalculatorProps) {
     {label: 'ln', action: () => handlePress('log('), key: 'ln'}, 
     {label: 'log10', action: () => handlePress('log10('), key: 'log10'},
     // Row 3
+    '7', '8', '9',
     {label: <SquareRadical />, action: () => handlePress('sqrt('), key: 'sqrt'}, 
-    '7', '8', '9', operatorKeys[0], // Divide
+    operatorKeys[0], // Divide
     // Row 4
+    '4', '5', '6', 
     {label: <Superscript />, action: () => handlePress('^'), key: 'pow'}, 
-    '4', '5', '6', operatorKeys[1], // Multiply
+    operatorKeys[1], // Multiply
     // Row 5
+    '1', '2', '3',
     {label: '!', action: () => handlePress('!'), key: '!'}, 
-    '1', '2', '3', operatorKeys[2], // Subtract
+    operatorKeys[2], // Subtract
     // Row 6
+    '0', '.',
     {label: 'pi', action: () => handlePress('pi'), key: 'pi'}, 
     {label: 'e', action: () => handlePress('e'), key: 'e'}, 
-    '0', '.', operatorKeys[3], // Add
+    operatorKeys[3], // Add
   ];
 
   const basicGrid = [
-      ...topRowKeys, operatorKeys[0],
-      ...basicDigits.slice(0,3), operatorKeys[1],
-      ...basicDigits.slice(3,6), operatorKeys[2],
-      ...basicDigits.slice(6,9), operatorKeys[3],
-      ...basicDigits.slice(9), equalsKey
+      ...topRowKeys, operatorKeys[0], // C, DEL, %, /
+      '7', '8', '9', operatorKeys[1], // 7, 8, 9, x
+      '4', '5', '6', operatorKeys[2], // 4, 5, 6, -
+      '1', '2', '3', operatorKeys[3], // 1, 2, 3, +
+      '0', '.', equalsKey // 0, ., =
   ];
 
   return (
@@ -145,9 +152,7 @@ export function Calculator({ onCalculate }: CalculatorProps) {
           </TabsContent>
           <TabsContent value="basic" className="mt-4">
              <div className="grid grid-cols-4 gap-2">
-                {basicGrid.slice(0,12).map((k,i) => renderKey(k, i, 'basic'))}
-                {renderKey(basicGrid[12], 12, 'basic')}
-                {renderKey(basicGrid[13], 13, 'basic')}
+                {basicGrid.map((k,i) => renderKey(k, i, 'basic'))}
              </div>
           </TabsContent>
         </Tabs>
