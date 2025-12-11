@@ -125,11 +125,17 @@ export function Calculator({ onCalculate }: CalculatorProps) {
   ];
 
   const basicGrid = [
-      ...topRowKeys, operatorKeys[0], // C, DEL, %, /
-      '7', '8', '9', operatorKeys[1], // 7, 8, 9, x
-      '4', '5', '6', operatorKeys[2], // 4, 5, 6, -
-      '1', '2', '3', operatorKeys[3], // 1, 2, 3, +
-      '0', '.', { label: '=', action: handleCalculate, className: 'bg-primary hover:bg-primary/90 text-primary-foreground', key: '=' }
+    ...topRowKeys, 
+    operatorKeys[0], // C, DEL, %, /
+    '7', '8', '9', 
+    operatorKeys[1], // 7, 8, 9, x
+    '4', '5', '6', 
+    operatorKeys[2], // 4, 5, 6, -
+    '1', '2', '3', 
+    operatorKeys[3], // 1, 2, 3, +
+    '0', 
+    '.', 
+    { label: '=', action: handleCalculate, className: 'bg-primary hover:bg-primary/90 text-primary-foreground', key: '=' }
   ];
 
   return (
