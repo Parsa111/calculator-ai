@@ -21,13 +21,13 @@ import { ScrollArea, ScrollBar } from './ui/scroll-area';
 
 const navItems = [
   { value: 'calculator', label: 'Calculator', icon: CalculatorIcon },
+  { value: 'date', label: 'Date', icon: Clock },
   { value: 'unit-converter', label: 'Units', icon: Ruler },
   { value: 'formula-solver', label: 'Formulas', icon: FlaskConical },
   { value: 'formula-drawer', label: 'Draw', icon: Pencil },
   { value: 'graphing-calculator', label: 'Graph', icon: LineChart },
   { value: 'word-problem', label: 'Word Problem', icon: BookText },
   { value: 'financial', label: 'Financial', icon: Landmark },
-  { value: 'date', label: 'Date', icon: Clock },
 ];
 
 export function CalcAiApp() {
