@@ -90,23 +90,21 @@ export function Calculator({ onCalculate }: CalculatorProps) {
     { label: <Plus />, action: () => handlePress('+'), key: '+' },
   ];
   
-  const equalsKey = { label: '=', action: handleCalculate, className: 'bg-primary hover:bg-primary/90 text-primary-foreground', key: '=' };
-
-  const basicDigits = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0', '.'];
+  const equalsKey = { label: '=', action: handleCalculate, className: 'bg-primary hover:bg-primary/90 text-primary-foreground col-span-2', key: '=' };
 
   const scientificGrid = [
     // Row 1
-    {label: '(', action: () => handlePress('('), key: '('}, 
-    {label: ')', action: () => handlePress(')'), key: ')'}, 
-    topRowKeys[2], // %
+    {label: 'sin', action: () => handlePress('sin('), key: 'sin'}, 
+    {label: 'cos', action: () => handlePress('cos('), key: 'cos'}, 
+    {label: 'tan', action: () => handlePress('tan('), key: 'tan'},
     topRowKeys[0], // C
     topRowKeys[1], // DEL
     // Row 2
-    {label: 'sin', action: () => handlePress('sin('), key: 'sin'}, 
-    {label: 'cos', action: () => handlePress('cos('), key: 'cos'}, 
-    {label: 'tan', action: () => handlePress('tan('), key: 'tan'}, 
     {label: 'ln', action: () => handlePress('log('), key: 'ln'}, 
     {label: 'log10', action: () => handlePress('log10('), key: 'log10'},
+    {label: '(', action: () => handlePress('('), key: '('}, 
+    {label: ')', action: () => handlePress(')'), key: ')'}, 
+    topRowKeys[2], // %
     // Row 3
     '7', '8', '9',
     {label: <SquareRadical />, action: () => handlePress('sqrt('), key: 'sqrt'}, 
@@ -131,7 +129,7 @@ export function Calculator({ onCalculate }: CalculatorProps) {
       '7', '8', '9', operatorKeys[1], // 7, 8, 9, x
       '4', '5', '6', operatorKeys[2], // 4, 5, 6, -
       '1', '2', '3', operatorKeys[3], // 1, 2, 3, +
-      '0', '.', equalsKey // 0, ., =
+      '0', '.', { label: '=', action: handleCalculate, className: 'bg-primary hover:bg-primary/90 text-primary-foreground', key: '=' }
   ];
 
   return (
