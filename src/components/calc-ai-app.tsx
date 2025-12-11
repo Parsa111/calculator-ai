@@ -100,17 +100,14 @@ export function CalcAiApp() {
             </div>
             
             <div className="hidden md:block">
-                 <ScrollArea className="w-full whitespace-nowrap">
-                  <TabsList className="w-max">
-                    {navItems.map(item => (
-                      <TabsTrigger key={item.value} value={item.value}>
-                        <item.icon className="w-4 h-4 mr-2" />
-                        {item.label}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
-                  <ScrollBar orientation="horizontal" />
-                </ScrollArea>
+              <TabsList className="h-auto flex-wrap justify-start">
+                {navItems.map(item => (
+                  <TabsTrigger key={item.value} value={item.value} className="m-1">
+                    <item.icon className="w-4 h-4 mr-2" />
+                    {item.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
             </div>
 
             <TabsContent value="calculator" className="mt-4">
