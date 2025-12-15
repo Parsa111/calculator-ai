@@ -7,8 +7,10 @@ import { solveWordProblem as solveWordProblemFlow, type SolveWordProblemInput, t
 import { calculateLoanPayment as calculateLoanPaymentFlow, type LoanPaymentInput, type LoanPaymentOutput } from "@/ai/flows/financial-calculations";
 import { calculateCompoundInterest as calculateCompoundInterestFlow, type CompoundInterestInput, type CompoundInterestOutput } from "@/ai/flows/financial-calculations";
 import { calculateDate as calculateDateFlow, type DateCalculationInput, type DateCalculationOutput } from "@/ai/flows/date-calculations";
+import { calculateStatistics as calculateStatisticsFlow, type StatisticsInput, type StatisticsOutput } from "@/ai/flows/statistical-calculations";
 
-export type { CompoundInterestOutput, SolveUserDefinedFormulaOutput, SolveWordProblemOutput, LoanPaymentOutput, DateCalculationOutput };
+
+export type { CompoundInterestOutput, SolveUserDefinedFormulaOutput, SolveWordProblemOutput, LoanPaymentOutput, DateCalculationOutput, StatisticsOutput };
 
 export async function convertUnitsFromNaturalLanguage(input: ConvertUnitsInput) {
     return await convertUnitsFromNaturalLanguageFlow(input);
@@ -36,4 +38,8 @@ export async function calculateCompoundInterest(input: CompoundInterestInput): P
 
 export async function calculateDate(input: DateCalculationInput): Promise<DateCalculationOutput> {
     return await calculateDateFlow(input);
+}
+
+export async function calculateStatistics(input: StatisticsInput): Promise<StatisticsOutput> {
+    return await calculateStatisticsFlow(input);
 }
