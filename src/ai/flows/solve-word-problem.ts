@@ -39,9 +39,9 @@ Follow these instructions:
 1.  **Identify the Formula**: First, determine the correct mathematical formula or equation needed to solve the problem.
 2.  **Extract Variables**: Identify all the necessary variables from the text and list them.
 3.  **Step-by-Step Solution**: Show the process of substituting the variables into the formula and solving the equation. Explain each step clearly.
-4.  **Final Answer**: State the final answer clearly, including any relevant units.
+4.  **Final Answer**: State the final answer clearly. **Crucially, the value for the 'result' field must be a STRING.** Include any relevant units in this string. For example: "180 miles".
 
-Your output must be a JSON object with three keys: "formula" (the equation used), "steps" (an array of strings explaining the process), and "result" (the final answer).
+Your output must be a JSON object with three keys: "formula" (the equation used), "steps" (an array of strings explaining the process), and "result" (the final string answer).
 `,
 });
 

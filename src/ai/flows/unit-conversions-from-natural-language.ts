@@ -1,10 +1,11 @@
+
 'use server';
 
 /**
  * @fileOverview Converts units from natural language queries using AI.
  *
  * - convertUnitsFromNaturalLanguage - A function that converts units from a natural language query.
- * - ConvertUnitsInput - The input type for the convertUnitsFromNaturalLanguage function.
+ * - ConvertUnitsInput - The input type for the convertUnitsFromNatural-language function.
  * - ConvertUnitsOutput - The return type for the convertUnitsFromNaturalLanguage function.
  */
 
@@ -35,7 +36,8 @@ const prompt = ai.definePrompt({
 
 Query: {{{query}}}
 
-Respond with just the answer, nothing else. No extraneous text.`,
+Your output MUST be a JSON object with a single key "result" that contains the numerical answer and the unit. For example: { "result": "1.609 kilometers" }.
+Respond with only the JSON object, nothing else. No extraneous text.`,
 });
 
 const convertUnitsFlow = ai.defineFlow(
@@ -46,6 +48,9 @@ const convertUnitsFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    if (!output) {
+      throw new Error('AI failed to generate a response for the unit conversion.');
+    }
+    return output;
   }
 );
