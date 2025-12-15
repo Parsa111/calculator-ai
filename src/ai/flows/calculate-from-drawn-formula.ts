@@ -1,3 +1,4 @@
+
 // src/ai/flows/calculate-from-drawn-formula.ts
 'use server';
 /**
@@ -60,7 +61,7 @@ const calculateFromDrawnFormulaFlow = ai.defineFlow(
     const formula = parsedFormula.output?.formula;
 
     if (!formula) {
-      throw new Error('Could not parse formula from image.');
+      throw new Error('AI failed to parse the formula from the image. Please try drawing more clearly.');
     }
 
     try {
@@ -71,18 +72,18 @@ const calculateFromDrawnFormulaFlow = ai.defineFlow(
         : formula;
 
       if (!expressionToEvaluate) {
-        throw new Error('Could not find a valid expression to evaluate.');
+        throw new Error('Could not find a valid expression to evaluate from the parsed formula.');
       }
       
       const result = evaluate(expressionToEvaluate, input.variableValues);
       // Ensure result is a number, as mathjs can return functions or other types.
-      if (typeof result !== 'number') {
-        throw new Error(`Evaluation resulted in a non-numerical value.`);
+      if (typeof result !== 'number' || !isFinite(result)) {
+        throw new Error(`Evaluation resulted in a non-numerical value: ${result}`);
       }
       return { result };
     } catch (error: any) {
       console.error('Error during formula evaluation:', error);
-      throw new Error(`Error evaluating formula: ${error.message}`);
+      throw new Error(`Error evaluating the formula "${formula}": ${error.message}`);
     }
   }
 );

@@ -40,7 +40,7 @@ export function FormulaDrawer({ onSolve }: FormulaDrawerProps) {
       try {
         const calculatedResult = evaluate(textFormula);
         setResult(calculatedResult);
-        onSolve({ type: 'draw', expression: textFormula, result: String(calculatedResult) });
+        onSolve({ type: 'calc', expression: textFormula, result: String(calculatedResult) });
       } catch (e: any) {
         toast({
           variant: 'destructive',

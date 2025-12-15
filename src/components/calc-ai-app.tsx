@@ -15,7 +15,8 @@ import { GraphingCalculator } from '@/components/graphing-calculator';
 import { WordProblemSolver } from '@/components/word-problem-solver';
 import { FinancialCalculators } from '@/components/financial-calculators';
 import { HistoryPanel } from '@/components/history-panel';
-import { Calculator as CalculatorIcon, FlaskConical, Pencil, Ruler, LineChart, BookText, Landmark, Menu } from 'lucide-react';
+import { Calculator as CalculatorIcon, FlaskConical, Pencil, Ruler, LineChart, BookText, Landmark, Menu, CalendarDays } from 'lucide-react';
+import { DateCalculator } from './date-calculator';
 
 const navItems = [
   { value: 'calculator', label: 'Calculator', icon: CalculatorIcon },
@@ -25,6 +26,7 @@ const navItems = [
   { value: 'graphing-calculator', label: 'Graph', icon: LineChart },
   { value: 'word-problem', label: 'Word Problem', icon: BookText },
   { value: 'financial', label: 'Financial', icon: Landmark },
+  { value: 'date-time', label: 'Date', icon: CalendarDays },
 ];
 
 export function CalcAiApp() {
@@ -132,6 +134,9 @@ export function CalcAiApp() {
             </TabsContent>
             <TabsContent value="financial" className="mt-4">
                 <FinancialCalculators onCalculate={addToHistory} />
+            </TabsContent>
+            <TabsContent value="date-time" className="mt-4">
+                <DateCalculator onCalculate={addToHistory} />
             </TabsContent>
           </Tabs>
         </div>
