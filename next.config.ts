@@ -31,9 +31,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  experimental: {
-    serverComponentsExternalPackages: ['recharts', 'mathjs']
-  },
+  serverExternalPackages: ['recharts', 'mathjs'],
 };
 
 export default nextConfig;
