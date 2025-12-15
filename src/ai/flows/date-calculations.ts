@@ -27,11 +27,15 @@ export async function calculateDate(input: DateCalculationInput): Promise<DateCa
 
 const dateCalculationPrompt = ai.definePrompt({
     name: 'dateCalculationPrompt',
-    input: { schema: DateCalculationInputSchema },
+    input: { schema: z.object({
+        currentDate: z.string(),
+        query: z.string(),
+        baseDate: z.string().optional(),
+    }) },
     output: { schema: DateCalculationOutputSchema },
     prompt: `You are an expert date and time calculator. Your task is to interpret the user's query and provide a precise answer.
 
-Current Date: ${new Date().toDateString()}
+Current Date: {{{currentDate}}}
 Base Date for calculation (if provided): {{{baseDate}}}
 
 Query: {{{query}}}
@@ -55,7 +59,10 @@ const dateCalculationFlow = ai.defineFlow(
   },
   async input => {
     try {
-      const { output } = await dateCalculationPrompt(input);
+      const { output } = await dateCalculationPrompt({
+          ...input,
+          currentDate: new Date().toDateString(),
+      });
       if (!output) {
         throw new Error("AI failed to generate a response.");
       }
