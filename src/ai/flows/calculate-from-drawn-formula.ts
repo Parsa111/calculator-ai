@@ -64,19 +64,22 @@ const calculateFromDrawnFormulaFlow = ai.defineFlow(
     }
 
     try {
-      let expressionToEvaluate = formula;
-      if (formula.includes('=')) {
-        const parts = formula.split('=');
-        if (parts.length === 2) {
-          expressionToEvaluate = parts[1].trim();
-        } else {
-          // Handle cases with multiple '=', though it might indicate a parsing issue
-          expressionToEvaluate = parts[parts.length - 1].trim();
-        }
+      // If the formula contains an '=', we will evaluate the right-hand side.
+      // Otherwise, we evaluate the whole formula string.
+      const expressionToEvaluate = formula.includes('=')
+        ? formula.split('=').slice(1).join('=').trim()
+        : formula;
+
+      if (!expressionToEvaluate) {
+        throw new Error('Could not find a valid expression to evaluate.');
       }
       
       const result = evaluate(expressionToEvaluate, input.variableValues);
-      return { result: result };
+      // Ensure result is a number, as mathjs can return functions or other types.
+      if (typeof result !== 'number') {
+        throw new Error(`Evaluation resulted in a non-numerical value.`);
+      }
+      return { result };
     } catch (error: any) {
       console.error('Error during formula evaluation:', error);
       throw new Error(`Error evaluating formula: ${error.message}`);

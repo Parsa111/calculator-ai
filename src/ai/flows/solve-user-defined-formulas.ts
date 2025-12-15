@@ -10,7 +10,6 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { evaluate } from 'mathjs';
 
 const SolveUserDefinedFormulaInputSchema = z.object({
   formula: z.string().describe('The user-defined formula (e.g., area = pi * r^2).'),
@@ -42,7 +41,7 @@ Variables: {{{variables}}}
 
 First, substitute the variables into the formula.
 Then, show each step of the calculation process.
-Finally, provide the final answer.
+Finally, calculate the final numerical answer and place it in the 'result' field.
 
 Your output must be a JSON object with two keys: "steps" (an array of strings explaining the process) and "result" (the final numerical answer).
 `,
@@ -63,24 +62,14 @@ const solveUserDefinedFormulaFlow = ai.defineFlow(
       });
 
       if (!output) {
-        throw new Error("AI failed to generate a response.");
+        throw new Error("AI failed to generate a response for the formula.");
       }
-
-      // Also evaluate with mathjs to double-check the AI's result.
-      // The AI is better for steps, mathjs is better for accuracy.
-      const expression = input.formula.includes('=')
-        ? input.formula.split('=')[1].trim()
-        : input.formula;
-      const mathjsResult = evaluate(expression, input.variables);
-
-      // Return AI-generated steps with the more reliable mathjs result.
-      return {
-        steps: output.steps,
-        result: parseFloat(mathjsResult.toPrecision(10)),
-      };
+      
+      // The AI is now responsible for providing the final result in the correct format.
+      return output;
       
     } catch (error: any) {
-      console.error('Error evaluating formula:', error);
+      console.error('Error in solveUserDefinedFormula flow:', error);
       throw new Error(`Error evaluating formula: ${error.message}`);
     }
   }
