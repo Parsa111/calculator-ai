@@ -6,7 +6,6 @@ import { convertUnitsFromNaturalLanguage as convertUnitsFromNaturalLanguageFlow,
 import { solveWordProblem as solveWordProblemFlow, type SolveWordProblemInput, type SolveWordProblemOutput } from "@/ai/flows/solve-word-problem";
 import { calculateLoanPayment as calculateLoanPaymentFlow, type LoanPaymentInput, type LoanPaymentOutput } from "@/ai/flows/financial-calculations";
 import { calculateCompoundInterest as calculateCompoundInterestFlow, type CompoundInterestInput, type CompoundInterestOutput } from "@/ai/flows/financial-calculations";
-import { calculateDate as calculateDateFlow, type DateCalculationInput, type DateCalculationOutput } from "@/ai/flows/date-calculations";
 
 export async function convertUnitsFromNaturalLanguage(input: ConvertUnitsInput) {
     return await convertUnitsFromNaturalLanguageFlow(input);
@@ -30,8 +29,4 @@ export async function calculateLoanPayment(input: LoanPaymentInput): Promise<Loa
 
 export async function calculateCompoundInterest(input: CompoundInterestInput): Promise<CompoundInterestOutput> {
     return await calculateCompoundInterestFlow(input);
-}
-
-export async function calculateDate(input: DateCalculationInput): Promise<DateCalculationOutput> {
-    return await calculateDateFlow(input);
 }

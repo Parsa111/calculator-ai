@@ -53,7 +53,7 @@ const calculateLoanPaymentFlow = ai.defineFlow(
       if (monthlyRate === 0) {
         const monthlyPayment = principal / numberOfPayments;
         return {
-          monthlyPayment,
+          monthlyPayment: parseFloat(monthlyPayment.toFixed(2)),
           totalPayment: principal,
           totalInterest: 0,
         };
@@ -90,6 +90,10 @@ const calculateCompoundInterestFlow = ai.defineFlow(
           const rate = annualRate / 100;
           const futureValue = principal * Math.pow(1 + rate / compoundsPerYear, compoundsPerYear * years);
           const totalInterest = futureValue - principal;
+          
+          if (!isFinite(futureValue)) {
+            throw new Error('The resulting value is too large to be calculated. Please use smaller inputs.');
+          }
 
           return {
               futureValue: parseFloat(futureValue.toFixed(2)),

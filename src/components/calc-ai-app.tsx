@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import type { HistoryEntry } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Calculator } from '@/components/calculator';
@@ -14,13 +14,11 @@ import { FormulaDrawer } from '@/components/formula-drawer';
 import { GraphingCalculator } from '@/components/graphing-calculator';
 import { WordProblemSolver } from '@/components/word-problem-solver';
 import { FinancialCalculators } from '@/components/financial-calculators';
-import { DateCalculator } from '@/components/date-calculator';
 import { HistoryPanel } from '@/components/history-panel';
-import { Calculator as CalculatorIcon, FlaskConical, Pencil, Ruler, LineChart, BookText, Landmark, Menu, Clock } from 'lucide-react';
+import { Calculator as CalculatorIcon, FlaskConical, Pencil, Ruler, LineChart, BookText, Landmark, Menu } from 'lucide-react';
 
 const navItems = [
   { value: 'calculator', label: 'Calculator', icon: CalculatorIcon },
-  { value: 'date', label: 'Date', icon: Clock },
   { value: 'unit-converter', label: 'Units', icon: Ruler },
   { value: 'formula-solver', label: 'Formulas', icon: FlaskConical },
   { value: 'formula-drawer', label: 'Draw', icon: Pencil },
@@ -134,9 +132,6 @@ export function CalcAiApp() {
             </TabsContent>
             <TabsContent value="financial" className="mt-4">
                 <FinancialCalculators onCalculate={addToHistory} />
-            </TabsContent>
-            <TabsContent value="date" className="mt-4">
-                <DateCalculator onCalculate={addToHistory} />
             </TabsContent>
           </Tabs>
         </div>
