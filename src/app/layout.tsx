@@ -5,6 +5,9 @@ import { Toaster } from "@/components/ui/toaster"
 export const metadata: Metadata = {
   title: 'CalcAI',
   description: 'AI-powered calculator for all your needs.',
+  icons: {
+    icon: '/icon.svg',
+  },
 };
 
 export const viewport: Viewport = {
