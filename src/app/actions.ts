@@ -8,7 +8,7 @@ import { calculateLoanPayment as calculateLoanPaymentFlow, type LoanPaymentInput
 import { calculateCompoundInterest as calculateCompoundInterestFlow, type CompoundInterestInput, type CompoundInterestOutput } from "@/ai/flows/financial-calculations";
 import { calculateDate as calculateDateFlow, type DateCalculationInput, type DateCalculationOutput } from "@/ai/flows/date-calculations";
 
-export type { CompoundInterestOutput };
+export type { CompoundInterestOutput, SolveUserDefinedFormulaOutput, SolveWordProblemOutput, LoanPaymentOutput, DateCalculationOutput };
 
 export async function convertUnitsFromNaturalLanguage(input: ConvertUnitsInput) {
     return await convertUnitsFromNaturalLanguageFlow(input);
