@@ -17,7 +17,6 @@ import { FinancialCalculators } from '@/components/financial-calculators';
 import { DateCalculator } from '@/components/date-calculator';
 import { HistoryPanel } from '@/components/history-panel';
 import { Calculator as CalculatorIcon, FlaskConical, Pencil, Ruler, LineChart, BookText, Landmark, Menu, Clock } from 'lucide-react';
-import { ScrollArea, ScrollBar } from './ui/scroll-area';
 
 const navItems = [
   { value: 'calculator', label: 'Calculator', icon: CalculatorIcon },
@@ -100,14 +99,19 @@ export function CalcAiApp() {
             </div>
             
             <div className="hidden md:block">
-              <TabsList className="h-auto flex-wrap justify-start">
-                {navItems.map(item => (
-                  <TabsTrigger key={item.value} value={item.value} className="m-1">
-                    <item.icon className="w-4 h-4 mr-2" />
-                    {item.label}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+              <div className="flex flex-wrap justify-start -m-1">
+                  {navItems.map(item => (
+                      <Button
+                          key={item.value}
+                          variant={activeTab === item.value ? 'default' : 'secondary'}
+                          onClick={() => setActiveTab(item.value)}
+                          className="m-1"
+                      >
+                          <item.icon className="w-4 h-4 mr-2" />
+                          {item.label}
+                      </Button>
+                  ))}
+              </div>
             </div>
 
             <TabsContent value="calculator" className="mt-4">
