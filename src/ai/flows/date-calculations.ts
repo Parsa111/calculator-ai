@@ -35,16 +35,17 @@ const dateCalculationPrompt = ai.definePrompt({
     output: { schema: DateCalculationOutputSchema },
     prompt: `You are an expert date and time calculator. Your task is to interpret the user's query and provide a precise answer.
 
-Current Date: {{{currentDate}}}
-Base Date for calculation (if provided): {{{baseDate}}}
+Current Date (for "today's" date reference): {{{currentDate}}}
+Base Date for calculation (use this if provided, otherwise use Current Date): {{{baseDate}}}
 
 Query: {{{query}}}
 
 Follow these instructions:
 1.  Parse the query to understand the user's intent (e.g., find a future/past date, calculate duration).
-2.  Perform the calculation accurately. For durations, provide the result in days, weeks, and months where appropriate.
-3.  For date results, format them clearly (e.g., "Month Day, Year").
-4.  Respond only with the calculated result.
+2.  If a "Base Date" is provided, use it as the starting point for the calculation.
+3.  If no "Base Date" is provided, use the "Current Date" as the reference for any mention of "today", "now", etc.
+4.  Perform the calculation accurately. For durations, provide the result in days. For date results, format them clearly as "Month Day, Year".
+5.  Respond only with the calculated result.
 
 Your output must be a JSON object with a single key "result".
 `,
@@ -61,7 +62,7 @@ const dateCalculationFlow = ai.defineFlow(
     try {
       const { output } = await dateCalculationPrompt({
           ...input,
-          currentDate: new Date().toDateString(),
+          currentDate: new Date().toISOString(),
       });
       if (!output) {
         throw new Error("AI failed to generate a response.");
