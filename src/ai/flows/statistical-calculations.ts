@@ -49,7 +49,7 @@ const statisticsCalculationFlow = ai.defineFlow(
         mean: round(calculatedMean, 4),
         median: round(calculatedMedian, 4),
         mode: Array.isArray(calculatedMode) ? calculatedMode.map(n => round(n, 4)) : round(calculatedMode as number, 4),
-        standardDeviation: round(calculatedStdDev, 4),
+        standardDeviation: round(calculatedStdDev as number, 4),
       };
     } catch (error: any) {
       console.error('Error in statistics calculation flow:', error);
